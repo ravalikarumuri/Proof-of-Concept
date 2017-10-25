@@ -1,0 +1,50 @@
+<div>
+  <h2><%="Hello #{current_user.role.name} -- #{current_user.name.capitalize}"%></h2>
+<%=  form_for @user, :url => create_new_account_user_registration_path, :html => {:method => :post} do |f|%>
+
+    <div class="field">
+      <%= f.label :Name,:class => "label" %>
+      <%= f.text_field :name, autofocus: true %>
+    </div>
+
+    <div class="field">
+      <%= f.label :email,:class => "label" %>
+      <%= f.email_field :email %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password,:class => "label" %>
+      <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %> characters minimum)</em>
+      <% end %>
+      <%= f.password_field :password, autocomplete: "off" %>
+    </div>
+
+    <div class="field">
+
+      <%= f.label :password_confirmation,:class => "label" %>
+      <%= f.password_field :password_confirmation, autocomplete: "off" %>
+    </div>
+
+    <div class="field">
+
+      <%= f.label :"Role",:class => "label" %>
+      <% if current_user.role.name =='account_admin' %>
+          <%= f.collection_select :role_id, Role.where(name:['location_manager','user_admin']),:id,:name, include_blank: true %>
+      <% else current_user.role.name == 'location_manager' %>
+          <%= f.collection_select :role_id, Role.where(name:['user_admin']),:id,:name, include_blank: true %>
+      <% end %>
+
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Save User",:class => "btn btn-success" %>
+    </div>
+
+<% end %>
+  <%=link_to 'View Subordinates',index_users_path,:class => "btn btn-info"%>
+  <button class="btn btn-success"><%=link_to "New Location", new_location_path%></button>
+  <%=link_to 'View User Locations',locations_path,:class => "btn btn-primary"%>
+  <%=link_to 'Create Order',new_order_path,:class => "btn btn-default"%>
+  <button class="btn btn-danger"><%=link_to "Logout", signout_path%></button>
+</div>

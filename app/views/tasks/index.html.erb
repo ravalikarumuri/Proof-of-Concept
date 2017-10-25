@@ -1,0 +1,17 @@
+<div class="cnt">
+  <h1>Available Tasks </h1>
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+    </tr>
+
+    <% @tasks.each do |task| %>
+        <tr>
+          <td><%= task.name %></td>
+          <td><%= task.price %></td>
+        </tr>
+    <% end %>
+  </table>
+</div>

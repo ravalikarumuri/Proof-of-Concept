@@ -1,0 +1,16 @@
+<div>
+<h1>Locations </h1>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+  </tr>
+
+  <% @locations.each do |location| %>
+      <tr>
+        <td><%= location.name %></td>
+        <td><%= link_to 'Show', location_path(location),class:"btn btn-info" %></td>
+      </tr>
+  <% end %>
+</table>
+</div>

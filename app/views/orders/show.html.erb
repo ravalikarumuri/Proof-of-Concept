@@ -1,0 +1,10 @@
+<h1><%= @order.id %></h1>
+<% @order.items.each do|item|%>
+    <p><%= item.name%></p>
+    <p><%=item.description%></p>
+    <p><%=item.price%></p>
+    <p><%=item.hours%></p>
+    <p><%=item.line_total%></p>
+    <%end%>
+<%= link_to 'Edit', edit_order_path(@order),class:"btn btn-info" %> |
+<%= link_to 'Back to Orders', orders_path,class:"btn" %>

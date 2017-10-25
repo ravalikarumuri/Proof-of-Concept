@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  username: postgres
+  password: ravali123
+  pool: 5 # not mandatory
+  timeout: 5000 # not mandatory
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: UserManagement
+
+test:
+  <<: *default
+  database: UserManagement
+
+
+production:
+  <<: *default
+  database: UserManagement

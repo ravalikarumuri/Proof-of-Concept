@@ -1,0 +1,78 @@
+<tr>
+  <%= hidden_field_tag :id%>
+  <% task_data = @tasks.pluck(:name, :id)
+     task_data << [:General, "general"]
+  %>
+  <td><%= f.select(:name, options_for_select(task_data), {:prompt => "Select Task Value"}, { :class => 'task',:onchange => "get_price($(this));"}) %></td>
+  <td> <%= f.text_area :description, :placeholder => "Enter Task Description"%></td>
+  <td><%= f.text_field :price,:class =>'tt',:onchange => "calculate($(this));"%></td>
+  <td> <%= f.text_field :hours,:class =>'tt',:onchange =>"calculate($(this));" %></td>
+  <td> <%= f.text_field :line_total,:readonly => true,:class => "line_total" %></td>
+  <td><%= f.label '_destroy', ('<i class="fa fa-times"><img class="icon icons8-Cancel" width="26" height="26" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAABlklEQVRIS72WjTEEQRBGv4vAyYAIyAAZkAERIAIuAkRABlwEyEAGhEAG6m1dq9E33TNrr0zVVt3ezvTrn69nZqa+cSxpT9Khm/4i6U3SsmVmlkyYSzqXdCGJ39n4lHQr6U4Sv9dGBDqVdNMB8AaBXEp68B9qIDwjkinjWtKiNOBBm4CYfUAAh1GCSNf9lDAqa88sjQai2O9/qEnLL2q2i0AMRIhXwSq8QsJIecvN+VpJfj/JxpBCA0H2RrD5E7okjJUwg+AEI0o9trcB0YyPQTRHK+P22WC807wGsffnwM4JoCxteAOsNAiM4f8DEjX2AhDpOEiqWoOV0wFnEOYue0BMjGA9ENa/9oJ84X3NakIqo+4CRZAxsCF1mRhqkEgMtT4zZwYxjJW3SdirEbmn8rZi9zRsqS4vkKhhycp8zBZUk7DBurcgGu0j2IZaG2f2nWh2yk0126umgNaOCTP2LwffJmG/TlcMZ5cTomt1vE8rNeHW1HU5scUIhEU8LSAAHOMZdd3yntLUSJjHjgIMclTwPLUU8w2wAWmb2VqjHAAAAABJRU5ErkJggg=="></i>').html_safe,:class => 'btn', style: "font-size: 12px;", :onclick => "remove_status_clone($(this));" %></td>
+</tr>
+
+<script type="text/javascript">
+
+  function remove_status_clone(data){
+    data.parent().parent().remove();
+    var total_count = 0;
+    $(".line_total").each(function() {
+      total_count = Number(total_count) + Number($(this).val());
+    });
+    $("#sub_total").val(total_count)
+   discount=$("#discount").val()
+    if(discount == null){
+      $("#after_discount").val(total_count )
+    }
+    else
+    {
+      sub_total = $("#sub_total").val();
+      after_discount_amount = Number(sub_total)-Number(discount)
+      $("#after_discount").val(after_discount_amount )
+    }
+
+  }
+
+    function get_price(e) {
+      id = e.attr('id');
+      number1 = e.val();
+      id_data = id.split("_")
+          if (number1 != "") {
+            $.ajax({
+              type: 'GET',
+              dataType: 'json',
+              url: "/tasks/" + number1 + "/get_price",
+              data: number1,
+              success: function (data) {
+                $("#order_items_attributes_" + id_data[3] + "_price").val(data);
+              }
+            })
+          }
+    }
+
+    function calculate(e1){
+      var id = e1.attr('id');
+      var id_data = id.split("_")
+      if(id_data[4] == 'hours') {
+        var hours = e1.val();
+        var price = $("#order_items_attributes_" + id_data[3] + "_price").val();
+        var line_total_val = Number(hours) * Number(price);
+        $("#order_items_attributes_" + id_data[3] + "_line_total").val(line_total_val);
+      }
+      else
+      {
+        var price = e1.val();
+        var hours = $("#order_items_attributes_"+id_data[3] +"_hours").val();
+        var line_total_val = Number(hours) * Number(price);
+        $("#order_items_attributes_" + id_data[3] + "_line_total").val(line_total_val);
+      }
+    }
+
+  $(document).on("change", ".tt", function () {
+    var total_count = 0;
+    $(".line_total").each(function() {
+        total_count = Number(total_count) + Number($(this).val());
+    });
+    $("#sub_total").val(total_count)
+  });
+</script>

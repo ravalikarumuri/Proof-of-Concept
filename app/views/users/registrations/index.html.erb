@@ -1,0 +1,17 @@
+<h1>List of Subordinates</h1>
+
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Role name</th>
+  </tr>
+
+  <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><%= user.role.name%></td>
+      </tr>
+  <% end %>
+</table>

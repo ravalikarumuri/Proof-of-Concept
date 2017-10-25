@@ -1,0 +1,53 @@
+<div class="cnt1">
+  <%= form_for @order, url: orders_path , :autocomplete => :off do |f| %>
+      <div class="field">
+        <span>
+        <%= f.label(:user,"User",:class => "label" )%>
+        <%= f.collection_select :user_id, current_user.subordinates, :id, :name,:prompt =>'Select the User',:class =>'btn btn-primary' %>
+        </span>
+        <span>
+        <%= label_tag :Date %>
+          <%= text_field_tag :date, :class => 'datepicker' %>
+        </span>
+      </div>
+      <table class="table-bordered">
+        <thead>
+        <tr>
+          <th >Task Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Hours</th>
+          <th>Line Total</th>
+          <th>Delete</th>
+        </tr>
+        </thead>
+        <%= f.fields_for :items do |builder| %>
+            <%= render 'item_fields', f: builder %>
+        <% end %>
+      </table>
+      <div >
+      <%= link_to_add_fields "Add Item", f, :items,class:"btn btn-success btn-sm" %>
+      </div>
+        <div>
+          <span><%= label_tag :total,'SubTotal'%></span>
+       <span><%= text_field_tag :subtotal, nil,class:'sum',:readonly => true,id: 'sub_total' %></span>
+          <%= label_tag :discount,'Discount'%></span>
+          <%= text_field_tag :discount,nil,id:'discount',:onchange => "calculate_total_amount_to_be_paid($(this));"%>
+          <%= text_field_tag :after_discount,nil,id:'after_discount'%>
+      </div>
+      <div class="actions">
+        <span><%= f.submit "Save Order", :class => "btn btn-success btn-sm"%></span>
+        <span><%= link_to 'Profile Page', new_account_user_registration_path, :class => "btn btn-sm" %></span>
+        <span><%= link_to 'View User Locations', locations_path, class:"btn btn-info btn-sm" %></span>
+      </div>
+  <% end %>
+
+</div>
+<script>
+  function calculate_total_amount_to_be_paid(e){
+    discount = e.val();
+    sub_total = $("#sub_total").val();
+    after_discount_amount = Number(sub_total)-Number(discount)
+    $("#after_discount").val(after_discount_amount )
+  }
+</script>

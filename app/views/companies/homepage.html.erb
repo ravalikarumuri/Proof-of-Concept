@@ -1,0 +1,11 @@
+
+<h1 >Welcome to Company</h1>
+<div>
+<button class="btn btn-primary"><%=link_to "Create New Company", new_user_registration_path%></button>
+<button class="btn btn-info"><%=link_to "SignIn", new_user_session_path%></button>
+<button class="btn btn-success"><%=link_to "New Task", new_task_path%></button>
+  <% if current_user%>
+<button class="btn btn-default"><%=link_to 'Profile Page',new_account_user_registration_path%></button>
+      <%end%>
+<button class="btn btn-danger"><%=link_to "Logout", signout_path%></button>
+</div>
